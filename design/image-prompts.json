@@ -1,0 +1,13 @@
+{
+  "mode": "Built-in image_gen tool; original images generated for this project.",
+  "assets": [
+    {
+      "path": "public/images/jewelry-hero.webp",
+      "prompt": "Use case: product-mockup. Asset type: premium jewelry web design studio homepage hero image, portrait 4:5 composition. Create a breathtaking photorealistic editorial still life of two sculptural 18k gold rings, one chunky flowing organic gold band and one delicate diamond solitaire, balanced on a large natural dark burgundy stone plinth. Close-up with luxurious tactile brushed gold highlights, realistic sparkling tiny diamond facets. Deep wine red and espresso background, subtle terracotta bounced light, dramatically lit from upper left with soft studio falloff, sophisticated fashion editorial art direction, analog film grain, extraordinary material realism, architectural sculptural composition. Main rings centered in upper middle; stone fills lower third. A faint curved shadow on the backdrop. Warm cinematic earthy color grading. The objects occupy most of image for dramatic website hero use. No text, no letters, no logos, no graphics, no watermark. Not a collage. High resolution."
+    },
+    {
+      "path": "public/images/jewelry-editorial.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: landscape 3:2 editorial fashion jewelry photograph for an independent fine jewelry website concept. Close crop of an adult woman's neck, collarbone, left ear and lower face, wearing one small sculptural gold teardrop earring and a very fine simple gold chain, warm natural skin with authentic pores and freckles, white ivory silk boat neck top, chestnut hair tucked back. Frame from below the nose to upper chest, sophisticated quiet luxury fashion campaign with relaxed gentle pose, hand lightly at neck, anatomically correct. Subject on right half, simple warm off-white plaster background with clean negative space on left. Soft directional daylight, gentle film grain, muted warm tones, elevated natural beauty, high end editorial photography. No text, no logos, no watermark, no extra jewelry, no graphics."
+    }
+  ]
+}
