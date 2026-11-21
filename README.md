@@ -1,6 +1,6 @@
 # Orris & Code
 
-An independent product studio showcase for custom SaaS, business software, and websites, built with React, TypeScript, Vite, and Tailwind CSS. The visual direction pairs readable DM Sans with Instrument Serif accents, a soft sage-and-stone palette, and clear, US-client-friendly messaging.
+An independent digital product and growth studio showcase for SaaS platforms, iOS and Android apps, websites, and social media management, built with React, TypeScript, Vite, and Tailwind CSS. The visual direction pairs readable DM Sans with Instrument Serif accents, a soft sage-and-stone palette, and clear, US-client-friendly messaging.
 
 ## Run locally
 
@@ -40,7 +40,7 @@ To add a project, place an image in `public/images` and add a record to `project
   id: 'your-project',
   name: 'Your project',
   subtitle: 'A concise description of the work.',
-  category: 'Jewelry & commerce', // or 'SaaS platforms'
+  category: 'SaaS platforms', // or 'Mobile apps' or 'Web & growth'
   type: 'Client project',
   description: 'What you built and why.',
   details: ['Verified project detail.', 'Another verified detail.'],
@@ -59,7 +59,7 @@ The gallery count and filters update automatically. Projects open in accessible 
 
 ViharSync is the founder-built **society-management SaaS** product. No client communities currently use it. Its interface is explicitly labeled as a concept with sample data, not a production screenshot or evidence of live features or outcomes.
 
-There are no client case studies yet. Maison Aurelle and Solenne are clearly labeled independent jewelry design concepts; they are not represented as paying clients, completed commercial engagements, or operating storefronts. No invented client testimonials or results are included.
+There are no client case studies yet. ViharSync is the founder-built product concept, while Orbit Mobile and Pulse Studio are independent design concepts. None are represented as commissioned engagements, shipped client projects, or evidence of client results.
 
 ## Inquiry behavior
 

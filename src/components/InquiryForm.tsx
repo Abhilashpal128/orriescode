@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Check, Copy, Download, Mail } from 'lucide-react'
 import { studio } from '../content'
 
-const needs = ['Custom SaaS', 'Business software', 'Websites & e-commerce', 'Something else']
+const needs = ['Custom SaaS', 'iOS & Android app', 'Web & social growth', 'Something else']
 const budgets = ['Under $5,000', '$5,000–$10,000', '$10,000–$25,000', '$25,000+', 'Let’s discuss']
 
 export default function InquiryForm({ initialService }: { initialService?: string }) {
@@ -18,7 +18,7 @@ export default function InquiryForm({ initialService }: { initialService?: strin
     const data = new FormData(event.currentTarget)
     const contactName = String(data.get('name')).trim()
     setName(contactName)
-    setBrief(`Hi ${studio.name},\n\nI’d love to discuss a project.\n\nName: ${contactName}\nEmail: ${String(data.get('email')).trim()}\nBusiness: ${String(data.get('business')).trim() || 'Not provided'}\nInterested in: ${service}\nBudget: ${data.get('budget')}\nTimeline: ${data.get('timeline')}\n\nAbout the project:\n${String(data.get('message')).trim()}\n\nLooking forward to connecting,\n${contactName}`)
+    setBrief(`Hi ${studio.name},\n\nI’d love to discuss a project.\n\nName: ${contactName}\nEmail: ${String(data.get('email')).trim()}\nPhone / WhatsApp: ${String(data.get('phone')).trim() || 'Not provided'}\nBusiness: ${String(data.get('business')).trim() || 'Not provided'}\nInterested in: ${service}\nBudget: ${data.get('budget')}\nTimeline: ${data.get('timeline')}\n\nAbout the project:\n${String(data.get('message')).trim()}\n\nLooking forward to connecting,\n${contactName}`)
   }
 
   async function copyBrief() {
@@ -41,7 +41,7 @@ export default function InquiryForm({ initialService }: { initialService?: strin
       <form onSubmit={prepare} className="inquiry-form">
         <fieldset><legend>What do you have in mind?</legend><div className="choice-group">{needs.map(need => <label key={need} className={service === need ? 'selected' : ''}><input type="radio" name="service" value={need} checked={service === need} onChange={() => setService(need)} />{need}</label>)}</div></fieldset>
         <div className="form-grid"><label>Your name <span>*</span><input required name="name" autoComplete="name" placeholder="Alex Morgan" maxLength={100} pattern=".*\S.*" /></label><label>Email address <span>*</span><input required name="email" type="email" autoComplete="email" placeholder="alex@yourbrand.com" maxLength={160} /></label></div>
-        <label>Business or website<input name="business" autoComplete="organization" placeholder="Your brand, business, or next big idea" maxLength={200} /></label>
+        <div className="form-grid"><label>Phone / WhatsApp<input name="phone" type="tel" autoComplete="tel" placeholder="+1 (555) 000-0000" maxLength={40} /></label><label>Business or website<input name="business" autoComplete="organization" placeholder="Your brand or company" maxLength={200} /></label></div>
         <div className="form-grid"><label>Budget in USD<select name="budget" defaultValue="Let’s discuss">{budgets.map(budget => <option key={budget}>{budget}</option>)}</select></label><label>Ideal timing<select name="timeline" defaultValue="Flexible"><option>As soon as possible</option><option>In 1–3 months</option><option>In 3–6 months</option><option>Flexible</option></select></label></div>
         <label>Tell us a little about your project <span>*</span><textarea required name="message" rows={3} placeholder="What are you imagining? What would you love to do better?" minLength={10} maxLength={1500} /></label>
         <button className="button button-dark w-full" type="submit">Prepare my inquiry <Mail size={17} /></button>

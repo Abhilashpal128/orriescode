@@ -1,48 +1,35 @@
-import { Bell, Building2, CircleHelp, Diamond, LayoutDashboard, Search, Settings, Users, Wallet } from 'lucide-react'
+import { BarChart3, CalendarDays, Check, LayoutDashboard, Share2, Smartphone, Users, Bell } from 'lucide-react'
 import type { Project } from '../content'
 import BrandMark from './BrandMark'
 
 export default function ProjectVisual({ project }: { project: Project }) {
   const { id } = project
   if (project.previewImage) return <div className="project-visual custom-project-visual"><img src={project.previewImage} alt={project.previewAlt || `${project.name} project preview`} loading="lazy" /><span className="visual-disclaimer">{project.type}</span></div>
-  if (!['maison', 'viharsync', 'solenne'].includes(id)) return <div className="project-visual custom-project-visual"><BrandMark /><span className="custom-project-name">{project.name}</span><span className="visual-disclaimer">{project.type}</span></div>
-  if (id === 'viharsync') return <div className="project-visual vihar-visual" aria-label="Illustrative ViharSync dashboard with sample community data" role="img">
-    <div className="dashboard-window" aria-hidden="true">
-      <aside className="dash-sidebar">
-        <div className="dash-logo"><Building2 size={19} /><b>vihar<span>sync</span></b></div>
-        <div className="dash-community"><span className="community-monogram">V</span><span>Vihar Heights<small>Community workspace</small></span></div>
-        <div className="dash-nav active"><LayoutDashboard />Overview</div>
-        <div className="dash-nav"><Users />Residents</div>
-        <div className="dash-nav"><Wallet />Payments</div>
-        <div className="dash-nav"><Building2 />Community</div>
-        <div className="dash-nav last"><Settings />Settings</div>
-        <div className="dash-help"><CircleHelp /><span>A little help?<small>Your community, connected.</small></span></div>
-      </aside>
-      <div className="dash-main">
-        <div className="dash-top"><span>Community overview</span><div><Search /><Bell /><span className="dash-avatar">AK</span></div></div>
-        <div className="dash-welcome"><div><h4>A little more connected.</h4><p>Here’s what’s happening in your community.</p></div><span>November 2026</span></div>
-        <div className="dash-stats"><div><span>Total homes</span><strong>248</strong><small>One connected community</small></div><div><span>Occupancy</span><strong>96<span>%</span></strong><small>Space for new beginnings</small></div><div><span>Open requests</span><strong>12</strong><small>Every detail matters</small></div></div>
-        <div className="dash-bottom"><div className="dash-chart"><div><b>Community activity</b><span>This month</span></div><div className="chart-bars">{[34, 58, 44, 76, 59, 86, 64, 92, 74, 100, 80, 91].map((n, i) => <span key={i} style={{ height: `${n}%` }} />)}</div><div className="chart-axis"><span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Week 4</span></div></div><div className="dash-notice"><b>Community board</b><div><span className="notice-icon">✧</span><strong>A place to belong.</strong><p>Good things happen when a community comes together.</p></div></div></div>
-      </div>
+  if (id === 'viharsync') return <div className="project-visual vihar-visual" aria-label="ViharSync web, mobile, and administrator platform" role="img">
+    <div className="vihar-showcase" aria-hidden="true">
+      <div className="vihar-showcase-main"><img src="/images/viharsync/viharsync-landing.png" alt="" loading="lazy" /></div>
+      <div className="vihar-showcase-admin"><img src="/images/viharsync/viharsync-dashboard.png" alt="" loading="lazy" /></div>
+      <div className="vihar-showcase-phone"><img src="/images/viharsync/WhatsApp Image 2026-11-21 at 4.40.21 PM.jpeg" alt="" loading="lazy" /></div>
     </div>
-    <span className="visual-disclaimer">Interface concept · sample data</span>
+    <span className="visual-disclaimer">Founder-built product · web, mobile & admin</span>
+  </div>
+  if (!['orbit', 'pulse'].includes(id)) return <div className="project-visual custom-project-visual"><BrandMark /><span className="custom-project-name">{project.name}</span><span className="visual-disclaimer">{project.type}</span></div>
+
+  if (id === 'orbit') return <div className="project-visual orbit-visual" role="img" aria-label="Orbit Mobile app interface concept for iOS and Android">
+    <div className="phone-stage" aria-hidden="true">
+      <div className="phone-shell phone-left"><div className="phone-notch" /><div className="phone-top"><span>9:41</span><span>•••</span></div><div className="phone-screen"><span className="phone-eyebrow">GOOD MORNING</span><strong>Today</strong><div className="phone-task done"><span><Check /></span><div><b>Morning review</b><small>Completed</small></div></div><div className="phone-task"><span>2</span><div><b>Design handoff</b><small>10:30 AM</small></div></div><div className="phone-task"><span>3</span><div><b>Team check-in</b><small>2:00 PM</small></div></div><div className="phone-nav"><LayoutDashboard /><CalendarDays /><Users /><Bell /></div></div></div>
+      <div className="phone-shell phone-right"><div className="phone-notch" /><div className="phone-top"><span>9:41</span><span>•••</span></div><div className="phone-screen phone-progress"><span className="phone-back">←</span><strong>Launch sprint</strong><small>12 of 16 tasks complete</small><div className="progress-ring"><span>75<small>%</small></span></div><div className="phone-members"><span>AM</span><span>JK</span><span>+4</span></div><div className="phone-action"><Smartphone /> Open workspace</div></div></div>
+    </div>
+    <span className="visual-disclaimer">Independent iOS & Android app concept</span>
   </div>
 
-  if (id === 'solenne') return <div className="project-visual solenne-visual" role="img" aria-label="Solenne jewelry website design concept featuring editorial gold jewelry photography">
-    <div className="solenne-window" aria-hidden="true">
-      <div className="solenne-nav"><span>Fine jewelry, quietly extraordinary.</span><b>solenne</b><div>Collections <span>Our story</span></div></div>
-      <div className="solenne-hero"><img src="/images/jewelry-editorial.webp" alt="" loading="lazy" width="1536" height="1024" /><div><span>FOR ALL YOUR EVERYDAYS</span><h4>Made to be<br /><i>part of you.</i></h4><span className="mock-link">Find your forever piece</span></div></div>
-      <div className="solenne-bottom"><span>A little gold. A lot of feeling.</span><Diamond size={14} /><span>Considered in every detail.</span></div>
+  if (id === 'pulse') return <div className="project-visual pulse-visual" role="img" aria-label="Pulse Studio social management and web analytics concept">
+    <div className="pulse-window" aria-hidden="true">
+      <div className="pulse-sidebar"><strong><Share2 /> pulse</strong><span className="active"><LayoutDashboard />Overview</span><span><CalendarDays />Calendar</span><span><Share2 />Channels</span><span><BarChart3 />Reports</span></div>
+      <div className="pulse-main"><div className="pulse-top"><strong>Campaign overview</strong><span>November 2026</span></div><div className="pulse-metrics"><div><span>Scheduled</span><strong>24</strong><small>Across 4 channels</small></div><div><span>Published</span><strong>18</strong><small>On track</small></div><div><span>Engagement</span><strong>8.6%</strong><small>↑ 1.4% this week</small></div></div><div className="pulse-content"><div className="pulse-calendar"><div className="pulse-card-head"><strong>Content calendar</strong><span>Week</span></div><div className="calendar-grid">{['18','19','20','21','22','23','24'].map((day, index) => <div key={day}><small>{['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][index]}</small><strong>{day}</strong>{index === 1 || index === 4 ? <span className="post-dot"><Share2 /></span> : null}</div>)}</div></div><div className="pulse-chart"><div className="pulse-card-head"><strong>Channel reach</strong><BarChart3 /></div><div className="pulse-bars">{[42,58,76,64,88,73,94].map((height, index) => <span key={index} style={{ height: `${height}%` }} />)}</div></div></div></div>
     </div>
-    <span className="visual-disclaimer">Independent design concept</span>
+    <span className="visual-disclaimer">Independent web & social-management concept</span>
   </div>
 
-  return <div className="project-visual maison-visual" role="img" aria-label="Maison Aurelle luxury jewelry storefront design concept">
-    <div className="maison-window" aria-hidden="true">
-      <div className="maison-nav"><span>Collections</span><b>MAISON AURELLE</b><span>Our world <span className="ml-3">Bag (0)</span></span></div>
-      <div className="maison-hero"><div><span>THE ART OF THE EVERYDAY</span><h4>Some things<br />stay with you.<br /><i>Make them gold.</i></h4><span className="mock-link">Discover the collection</span></div><img src="/images/jewelry-hero.webp" alt="" loading="lazy" width="1122" height="1402" /></div>
-      <div className="maison-bottom"><span>Considered. Collected. Cherished.</span><span>Modern heirlooms, made personal.</span></div>
-    </div>
-    <span className="visual-disclaimer">Independent design concept</span>
-  </div>
+  return <div className="project-visual custom-project-visual"><BrandMark /><span className="custom-project-name">{project.name}</span><span className="visual-disclaimer">{project.type}</span></div>
 }
