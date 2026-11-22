@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, ArrowRight, BarChart3, Check, ChevronDown, ChevronLeft, ChevronRight, Code2, Globe2, Menu, Monitor, Plus, Share2, Smartphone, Sparkles, X } from 'lucide-react'
-import BrandMark from './components/BrandMark'
+import { useEffect, useState } from 'react'
+import { BarChart3, Check, ChevronLeft, ChevronRight, Code2, Globe2, Menu, Monitor, Plus, Share2, Smartphone, Sparkles, X } from 'lucide-react'
 import BrandIdentity from './components/BrandIdentity'
 import InquiryForm from './components/InquiryForm'
 import Modal from './components/Modal'
@@ -8,6 +7,7 @@ import ProjectVisual from './components/ProjectVisual'
 import { faqs, projects, studio, type Project } from './content'
 
 const workTabs = [
+  { label: 'All projects', mode: 'all' },
   { label: 'App projects', mode: 'app' },
   { label: 'Website projects', mode: 'website' },
 ] as const
@@ -165,13 +165,13 @@ function ServiceDetailPage({ service, onStartProject }: { service: ServiceOfferi
 
   return <main id="main" className="service-detail-page">
     <div className="section-wrap">
-      <a className="service-back-link" href="#expertise"><ArrowLeft size={16} /> Back to all services</a>
+      <a className="service-back-link" href="#expertise"> Back to all services</a>
       <div className="service-detail-hero">
         <div>
           <span className="eyebrow">{studio.name.toUpperCase()} · {service.eyebrow}</span>
           <h1>{service.heading}</h1>
           <p>{service.description}</p>
-          <div className="service-detail-actions"><button className="button button-dark" onClick={onStartProject}>Discuss your project <ArrowRight size={16} /></button><a className="button button-outline" href="#work">View selected work</a></div>
+          <div className="service-detail-actions"><button className="button button-dark" onClick={onStartProject}>Discuss your project </button><a className="button button-outline" href="#work">View selected work</a></div>
         </div>
         <aside className="service-tech-card"><span className="eyebrow">TOOLS & CAPABILITIES</span><div>{service.technologies.map(item => <span key={item}>{item}</span>)}</div></aside>
       </div>
@@ -180,7 +180,7 @@ function ServiceDetailPage({ service, onStartProject }: { service: ServiceOfferi
           <span className="eyebrow">A PRACTICAL APPROACH</span>
           <h2>Built around the way your business works.</h2>
           <p>Every engagement starts with the people, goals, and day-to-day workflows behind the request. We shape a clear scope together before moving into design and development.</p>
-          <div className="service-approach-grid">{service.approach.map((item, index) => <article key={item.title}><span className="eyebrow">0{index + 1} / HOW WE WORK</span><h3>{item.title}</h3><p>{item.text}</p></article>)}</div>
+          <div className="service-approach-grid">{service.approach.map(item => <article key={item.title}><h3>{item.title}</h3><p>{item.text}</p></article>)}</div>
         </div>
         <aside className="service-deliverables">
           <span className="eyebrow">COMMON DELIVERABLES</span>
@@ -188,205 +188,127 @@ function ServiceDetailPage({ service, onStartProject }: { service: ServiceOfferi
           <ul>{service.deliverables.map(item => <li key={item}><Check size={16} />{item}</li>)}</ul>
         </aside>
       </section>
-      <nav className="service-related" aria-label="Related services"><span className="eyebrow">RELATED SERVICES</span><div>{relatedServices.map(related => <a key={related.id} href={`#/services/${related.id}`}>{related.title}<ArrowRight size={14} /></a>)}</div></nav>
-      <aside className="service-next-step"><div><span className="eyebrow">NEXT STEPS</span><h2>Have a {service.title.toLowerCase()} project in mind?</h2><p>Tell us what you need and we’ll help shape a practical, high-performance solution.</p></div><button className="button button-dark" onClick={onStartProject}>Start a conversation <ArrowRight size={16} /></button></aside>
+      <nav className="service-related" aria-label="Related services"><span className="eyebrow">RELATED SERVICES</span><div>{relatedServices.map(related => <a key={related.id} href={`#/services/${related.id}`}>{related.title}</a>)}</div></nav>
+      <aside className="service-next-step"><div><span className="eyebrow">NEXT STEPS</span><h2>Have a {service.title.toLowerCase()} project in mind?</h2><p>Tell us what you need and we’ll help shape a practical, high-performance solution.</p></div><button className="button button-dark" onClick={onStartProject}>Start a conversation </button></aside>
     </div>
   </main>
 }
 
+function ProjectGallery({ project }: { project: Project }) {
+  const [mode, setMode] = useState<'website' | 'app'>('website')
+  const [index, setIndex] = useState(0)
+  const surfaces = project.id === 'viharsync'
+    ? (mode === 'app' ? mobileWorkSurfaces : websiteWorkSurfaces)
+    : project.galleryImages ?? (project.previewImage ? [{ title: 'Project preview', image: project.previewImage }] : [])
+  if (!surfaces.length) return null
+  const current = surfaces[index]
+  return <div className="project-gallery">
+    <div className="gallery-toolbar">
+      {project.id === 'viharsync' ? <div className="filter-group" aria-label="Project screens">
+        {(['website', 'app'] as const).map(type => <button key={type} aria-pressed={mode === type} className={mode === type ? 'active' : ''} onClick={() => { setMode(type); setIndex(0) }}>{type === 'website' ? 'Web & admin' : 'Mobile app'}</button>)}
+      </div> : <span className="eyebrow">WEBSITE PREVIEW</span>}
+      <div className="carousel-controls"><button aria-label="Previous project screen" onClick={() => setIndex((index + surfaces.length - 1) % surfaces.length)}><ChevronLeft size={20} /></button><button aria-label="Next project screen" onClick={() => setIndex((index + 1) % surfaces.length)}><ChevronRight size={20} /></button></div>
+    </div>
+    <figure className={`gallery-stage ${mode === 'app' ? 'gallery-mobile' : ''}`}><img src={current.image} alt={`${current.title} in ${project.name}`} /><figcaption aria-live="polite">{current.title}<span>{index + 1} / {surfaces.length}</span></figcaption></figure>
+    <div className="gallery-thumbnails" aria-label="Choose a screen">{surfaces.map((surface, screenIndex) => <button key={surface.title} aria-label={`Show ${surface.title}`} aria-pressed={index === screenIndex} onClick={() => setIndex(screenIndex)}><img src={surface.image} alt="" loading="lazy" /><span>{surface.title}</span></button>)}</div>
+  </div>
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [workMode, setWorkMode] = useState<'website' | 'app'>('app')
-  const [mobileScreenIndex, setMobileScreenIndex] = useState(0)
-  const [websiteScreenIndex, setWebsiteScreenIndex] = useState(0)
-  const [showcaseVisible, setShowcaseVisible] = useState(false)
+  const [workMode, setWorkMode] = useState<'all' | 'website' | 'app'>('all')
   const [activeServiceId, setActiveServiceId] = useState<string | null>(serviceIdFromHash)
   const [faqOpen, setFaqOpen] = useState<number | null>(0)
   const [modal, setModal] = useState<OpenModal>(null)
-  const showcaseRef = useRef<HTMLDivElement>(null)
   const activeService = serviceOfferings.find(service => service.id === activeServiceId)
-  const activeSurfaces = workMode === 'app' ? mobileWorkSurfaces : websiteWorkSurfaces
-  const activeScreenIndex = workMode === 'app' ? mobileScreenIndex : websiteScreenIndex
-
-  function moveScreen(direction: -1 | 1) {
-    const updateIndex = (index: number) => (index + direction + activeSurfaces.length) % activeSurfaces.length
-    if (workMode === 'app') setMobileScreenIndex(updateIndex)
-    else setWebsiteScreenIndex(updateIndex)
-  }
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
-      if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target) }
-    }), { threshold: 0.08 })
-    document.querySelectorAll('[data-reveal]').forEach(element => observer.observe(element))
-    return () => observer.disconnect()
-  }, [])
+  const visibleProjects = projects.filter(project => workMode === 'all' || project.platforms.includes(workMode))
 
   useEffect(() => {
     if (!menuOpen) return
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') { setMenuOpen(false); document.querySelector<HTMLButtonElement>('.menu-toggle')?.focus() } }
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') { setMenuOpen(false); document.querySelector<HTMLButtonElement>('.menu-toggle')?.focus() }
+    }
     document.addEventListener('keydown', closeOnEscape)
     return () => document.removeEventListener('keydown', closeOnEscape)
   }, [menuOpen])
 
   useEffect(() => {
-    const syncServiceRoute = () => setActiveServiceId(serviceIdFromHash())
+    const syncServiceRoute = () => { setActiveServiceId(serviceIdFromHash()); setMenuOpen(false) }
     window.addEventListener('hashchange', syncServiceRoute)
     return () => window.removeEventListener('hashchange', syncServiceRoute)
   }, [])
 
   useEffect(() => {
-    if (activeService) window.scrollTo(0, 0)
+    if (activeService) { window.scrollTo({ top: 0, behavior: 'instant' }); return }
+    const target = window.location.hash.slice(1)
+    if (target) requestAnimationFrame(() => document.getElementById(target)?.scrollIntoView())
   }, [activeService])
-
-  useEffect(() => {
-    const showcase = showcaseRef.current
-    if (!showcase) return
-    const observer = new IntersectionObserver(([entry]) => setShowcaseVisible(entry.isIntersecting), { threshold: 0.2 })
-    observer.observe(showcase)
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    if (!showcaseVisible || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const interval = window.setInterval(() => {
-      if (document.visibilityState !== 'visible') return
-      if (workMode === 'app') setMobileScreenIndex(index => (index + 1) % mobileWorkSurfaces.length)
-      else setWebsiteScreenIndex(index => (index + 1) % websiteWorkSurfaces.length)
-    }, 3600)
-    return () => window.clearInterval(interval)
-  }, [showcaseVisible, workMode])
 
   function startProject(initialService?: string) { setMenuOpen(false); setModal({ type: 'inquiry', service: initialService }) }
 
   return <>
     <a className="skip-link" href="#main">Skip to content</a>
     <header className="site-header">
-      <div className="header-inner">
+      <div className="header-inner section-wrap">
         <BrandIdentity />
-        <nav className="desktop-nav" aria-label="Main navigation"><a href="#work">Selected work</a><a href="#expertise">Services</a><a href="#process">How we work</a><a href="#studio">About</a></nav>
-        <button className="button button-outline header-cta" onClick={() => startProject()}>Start a conversation <span className="small-spark">↗</span></button>
+        <nav className="desktop-nav" aria-label="Main navigation"><a href="#work">Our work</a><a href="#expertise">Services</a><a href="#process">Process</a><a href="#studio">About us</a></nav>
+        <button className="button button-dark header-cta" onClick={() => startProject()}>Let’s talk</button>
         <button className="menu-toggle" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} aria-controls="mobile-nav" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
       </div>
-      {menuOpen && <nav id="mobile-nav" className="mobile-nav" aria-label="Mobile navigation"><a onClick={() => setMenuOpen(false)} href="#work">Our work</a><a onClick={() => setMenuOpen(false)} href="#expertise">Services</a><a onClick={() => setMenuOpen(false)} href="#process">How we work</a><a onClick={() => setMenuOpen(false)} href="#studio">About</a><button className="button button-dark" onClick={() => startProject()}>Start a conversation</button></nav>}
+      {menuOpen && <nav id="mobile-nav" className="mobile-nav" aria-label="Mobile navigation"><a onClick={() => setMenuOpen(false)} href="#work">Our work</a><a onClick={() => setMenuOpen(false)} href="#expertise">Services</a><a onClick={() => setMenuOpen(false)} href="#process">Process</a><a onClick={() => setMenuOpen(false)} href="#studio">About us</a><button className="button button-dark" onClick={() => startProject()}>Start a conversation</button></nav>}
     </header>
 
-    {activeService
-      ? <ServiceDetailPage service={activeService} onStartProject={() => startProject(activeService.inquiryService)} />
-      : <main id="main">
-      <section className="hero section-wrap" aria-labelledby="hero-heading">
-        <div className="hero-copy">
-          <div className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> GLOBAL DIGITAL PARTNER · US, UK, CANADA & MORE</div>
-          <h1 id="hero-heading">Your idea.<br /><i>Built the right way.</i></h1>
-          <p className="hero-description">We design and develop custom SaaS platforms, iOS and Android apps, business systems, websites, and social media workflows around exactly how you want your business to work.</p>
-          <div className="hero-actions"><a className="button button-dark" href="#work">See what we build <ChevronDown size={16} className="arrow-down-right" /></a><button className="text-link" onClick={() => startProject()}>Discuss your project</button></div>
-          <div className="hero-proof" aria-label="Core delivery capabilities"><span><strong>Build</strong> SaaS & mobile apps</span><span><strong>Grow</strong> Websites & social</span><span><strong>Support</strong> From launch onward</span></div>
-          <div className="hero-footnote"><div className="craft-symbol"><Code2 size={21} /><span>+</span><Sparkles size={20} strokeWidth={1.25} /></div><span>Thoughtful product thinking.<br /><strong>Reliable engineering.</strong></span></div>
-        </div>
-        <div className="hero-art">
-          <div className="hero-agency-window" role="img" aria-label="Digital product workspace showing web, mobile, and business software capabilities">
-            <div className="agency-window-bar"><div className="agency-window-dots"><span /><span /><span /></div><span>PRODUCT WORKSPACE</span><div className="agency-status"><span /> Ready to build</div></div>
-            <div className="agency-window-body">
-              <div className="agency-sidebar" aria-hidden="true"><span className="agency-logo-mark">OC</span><span className="active">01</span><span>02</span><span>03</span><span>04</span></div>
-              <div className="agency-canvas" aria-hidden="true">
-                <div className="agency-canvas-heading"><span>ACTIVE BUILD</span><strong>One connected<br />digital system.</strong></div>
-                <div className="agency-device-grid">
-                  <div className="agency-browser"><div className="agency-browser-bar"><span /><span /><span /><b>your-business.com</b></div><div className="agency-browser-body"><span>NEW EXPERIENCE</span><strong>Built for the people<br />you want to reach.</strong><div><i /><i /><i /></div></div></div>
-                  <div className="agency-phone"><div className="agency-phone-notch" /><span>Mobile app</span><strong>Easy to use.<br />Ready to grow.</strong><div className="agency-phone-actions"><i /><i /><i /></div></div>
-                </div>
-                <div className="agency-metrics"><div><span>WEB</span><strong>Fast</strong></div><div><span>APP</span><strong>Native</strong></div><div><span>SAAS</span><strong>Scalable</strong></div></div>
-              </div>
-            </div>
-          </div>
-          <div className="hero-build-note" aria-hidden="true"><span><Sparkles size={17} /></span><div><strong>Web. Mobile.<br />SaaS. Growth.</strong><small>DESIGNED AS ONE SYSTEM</small></div></div>
+    {activeService ? <ServiceDetailPage service={activeService} onStartProject={() => startProject(activeService.inquiryService)} /> : <main id="main">
+      <section className="hero-section" aria-labelledby="hero-heading">
+        <div className="hero section-wrap">
+          <div className="hero-topline"><span className="eyebrow">INDEPENDENT DESIGN & DEVELOPMENT STUDIO</span><span className="hero-location"><Globe2 size={15} /> India-based. Working worldwide.</span></div>
+          <h1 id="hero-heading">Ambitious ideas.<br />Thoughtfully <span className="heading-accent">built.</span></h1>
+          <div className="hero-bottom"><div className="hero-actions"><button className="button button-dark" onClick={() => startProject()}>Discuss your project</button><a className="hero-work-link" href="#work">Explore our work</a></div><p className="hero-description">We design and build websites, apps, and digital products that make your business easier to understand—and better to use.</p></div>
         </div>
       </section>
 
-      <div className="discipline-strip"><div className="section-wrap"><span>ONE DIGITAL PARTNER</span><div><span>Custom SaaS</span><span className="strip-star">✳</span><span>Mobile apps</span><span className="strip-star">✳</span><span>Websites</span><span className="strip-star">✳</span><span>Social management</span></div></div></div>
+      <section id="work" className="work-section section-space" aria-labelledby="work-heading"><div className="section-wrap">
+        <div className="work-heading"><h2 id="work-heading">A little of what we do.</h2><span className="eyebrow">SELECTED WORK</span></div>
+        <div className="work-toolbar"><div className="filter-group" aria-label="Choose project type">{workTabs.map(tab => <button key={tab.mode} className={workMode === tab.mode ? 'active' : ''} aria-pressed={workMode === tab.mode} onClick={() => setWorkMode(tab.mode)}>{tab.label}</button>)}</div><span className="work-note" role="status">{visibleProjects.length} {visibleProjects.length === 1 ? 'project' : 'projects'}</span></div>
+        <div className="project-grid">{visibleProjects.map(project => <article className={`project-card ${project.className}`} key={project.id}>
+          <button className="project-preview" onClick={() => setModal({ type: 'project', project })} aria-label={`View ${project.name} project`}><ProjectVisual project={project} /><span className="project-preview-action" aria-hidden="true">Explore project <Plus size={18} /></span></button>
+          <div className="project-card-body"><div className="project-meta"><span>{project.type}</span><span>{project.platforms.length > 1 ? 'WEB + APP' : 'WEBSITE'}</span></div><div className="project-title-row"><h3>{project.name}</h3><button className="project-details-link" onClick={() => setModal({ type: 'project', project })} aria-label={`More about ${project.name}`}><Plus size={22} /></button></div><p>{project.subtitle}</p><div className="project-tags">{project.id === 'viharsync' ? <><span>Product design</span><span>Web & mobile development</span></> : <><span>Web design</span><span>Development</span></>}</div></div>
+        </article>)}</div>
+        <div className="work-next"><p>Something you’re imagining could be here next.</p><button className="text-link" onClick={() => startProject()}>Start a project</button></div>
+      </div></section>
 
-      <section className="technology-strip" aria-label="Technology capabilities">
-        <div className="section-wrap technology-inner">
-          <span className="eyebrow">A PRACTICAL MODERN STACK</span>
-          <div className="technology-list" aria-label="Technology and design tools">
-            <span>React</span><i /> <span>TypeScript</span><i /> <span>React Native</span><i /> <span>Node.js</span><i /> <span>PostgreSQL</span><i /> <span>AWS</span><i /> <span>Figma</span>
-          </div>
+      <section id="expertise" className="expertise-section section-space" aria-labelledby="expertise-heading"><div className="section-wrap">
+        <div className="expertise-layout"><div className="expertise-intro"><span className="eyebrow">OUR CAPABILITIES</span><h2 id="expertise-heading">Good design.<br />Solid engineering.</h2><p>From the first conversation to the final details. The right mix of skills, all working toward your goal.</p><button className="text-link" onClick={() => startProject()}>Find the right starting point</button></div>
+          <div className="services-grid">{serviceOfferings.map(offering => <a className="service-card" key={offering.id} href={`#/services/${offering.id}`}><span className="service-icon"><ServiceIcon type={offering.icon} /></span><div className="service-card-copy"><h3>{offering.title}</h3><p>{offering.summary}</p></div><span className="service-card-action"><span className="sr-only">Explore service</span><Plus size={21} /></span></a>)}</div>
         </div>
-      </section>
+        <div className="technology-inner"><span className="eyebrow">BUILT WITH TOOLS WE TRUST</span><div className="technology-list">{['React', 'TypeScript', 'React Native', 'Node.js', 'PostgreSQL', 'Figma'].map(name => <span key={name}>{name}</span>)}</div></div>
+      </div></section>
 
-      <section id="work" className="work-section section-wrap section-space" aria-labelledby="work-heading">
-        <div className="section-heading" data-reveal><div><span className="eyebrow">SELECTED WORK · PRODUCTS & DIGITAL EXPERIENCES</span><h2 id="work-heading">Built products.<br /><i>Ready for the next one.</i></h2></div><p>ViharSync is our featured in-house product. As we deliver more client work, this section will grow with websites, apps, SaaS platforms, and business systems.</p></div>
-        <div className="work-toolbar work-mode-toolbar" data-reveal><div className="filter-group" aria-label="Choose project type">{workTabs.map(tab => <button key={tab.mode} className={workMode === tab.mode ? 'active' : ''} aria-pressed={workMode === tab.mode} onClick={() => setWorkMode(tab.mode)}>{tab.label}</button>)}</div><span className="work-note" role="status">ViharSync · our in-house product</span></div>
-        <div className="surface-carousel" data-reveal>
-          <div className="surface-carousel-heading"><div><span className="eyebrow">{workMode === 'website' ? 'WEBSITE & ADMIN' : 'MOBILE APP'}</span><h3>{workMode === 'website' ? <>Web & <i>admin.</i></> : <>One app. <i>Every screen.</i></>}</h3></div><div className="carousel-controls"><button type="button" aria-label="Previous ViharSync screen" onClick={() => moveScreen(-1)}><ChevronLeft /></button><button type="button" aria-label="Next ViharSync screen" onClick={() => moveScreen(1)}><ChevronRight /></button></div></div>
-          <div className={`product-showcase ${workMode === 'app' ? 'showcase-app' : 'showcase-website'}`} ref={showcaseRef}>
-            <div className="showcase-copy">
-              <span className="eyebrow">VIHARSYNC · {workMode === 'app' ? 'MOBILE APP' : 'WEB PLATFORM'}</span>
-              <strong>{workMode === 'app' ? 'One clear experience.' : 'One connected platform.'}</strong>
-              <p>{activeSurfaces[activeScreenIndex].title}</p>
-              <div className="showcase-dots" aria-label={`${workMode === 'app' ? 'App' : 'Website'} screens`}>
-                {activeSurfaces.map((surface, index) => <button key={surface.title} type="button" aria-label={`Show ${surface.title}`} aria-current={index === activeScreenIndex ? 'step' : undefined} onClick={() => workMode === 'app' ? setMobileScreenIndex(index) : setWebsiteScreenIndex(index)} />)}
-              </div>
-              <span className="showcase-hint">A closer look at the product</span>
-            </div>
-            <button type="button" className="showcase-open" onClick={() => projects[0] && setModal({ type: 'project', project: projects[0] })} aria-label={`Open ViharSync details — ${activeSurfaces[activeScreenIndex].title}`}>
-              <span className={workMode === 'app' ? 'showcase-device showcase-phone' : 'showcase-device showcase-browser'}>
-                {workMode === 'website' && <span className="showcase-browser-bar"><i /><i /><i /><span>viharsync.com</span></span>}
-                <span className="showcase-screen-window">
-                  {workMode === 'app' && <span className="phone-notch" />}
-                  <span className="showcase-screen-track" style={{ height: `${activeSurfaces.length * 100}%`, transform: `translateY(-${activeScreenIndex * (100 / activeSurfaces.length)}%)` }}>
-                    {activeSurfaces.map(surface => <span className="showcase-screen" key={surface.title} style={{ flexBasis: `${100 / activeSurfaces.length}%` }}><img src={surface.image} alt={`${surface.title} in ViharSync`} loading="lazy" /></span>)}
-                  </span>
-                </span>
-              </span>
-            </button>
-            <span className="showcase-open-label">View ViharSync details <Plus /></span>
-          </div>
-        </div>
-        <aside className="work-coming-soon" data-reveal>
-          <div><span className="eyebrow">YOUR PRODUCT COULD BE HERE NEXT</span><h3>A digital system built<br /><i>around your business.</i></h3></div>
-          <button type="button" className="button button-dark" onClick={() => startProject()}>Start a project <ChevronRight /></button>
-        </aside>
-        <p className="portfolio-note">ViharSync is our own product, shown as a product showcase. No external client usage or paid-case-study results are claimed.</p>
-      </section>
-
-      <section id="expertise" className="expertise-section section-space" aria-labelledby="expertise-heading">
-        <div className="section-wrap">
-            <div className="section-heading" data-reveal><div><span className="eyebrow">FROM FIRST IDEA TO FINISHED PRODUCT</span><h2 id="expertise-heading">Services built<br /><i>around your business.</i></h2></div><p>Explore the capabilities we bring together to create useful products and stronger digital experiences.</p></div>
-            <div className="service-ticker" role="region" aria-label="Our services, scrolling horizontally">
-              <div className="service-ticker-track">
-                <div className="service-ticker-set">
-                  {serviceOfferings.map(offering => <a className="service-ticker-card" key={offering.id} href={`#/services/${offering.id}`}><span className="service-ticker-icon"><ServiceIcon type={offering.icon} /></span><strong>{offering.title}</strong><p>{offering.summary}</p><span className="service-ticker-link">Explore service <ArrowRight size={15} /></span><small>{offering.technologies.slice(0, 2).join(' · ')}</small></a>)}
-                </div>
-                <div className="service-ticker-set" aria-hidden="true">
-                  {serviceOfferings.map(offering => <div className="service-ticker-card" key={offering.id}><span className="service-ticker-icon"><ServiceIcon type={offering.icon} /></span><strong>{offering.title}</strong><p>{offering.summary}</p><span className="service-ticker-link">Explore service <ArrowRight size={15} /></span><small>{offering.technologies.slice(0, 2).join(' · ')}</small></div>)}
-                </div>
-              </div>
-            </div>
-            <div className="expertise-cta"><p>Not sure which service fits? Tell us what you’re trying to solve.</p><button className="text-link" onClick={() => startProject()}>Let’s talk about your project <ArrowRight size={15} /></button></div>
-        </div>
-      </section>
+      <section id="process" className="process-section section-space" aria-labelledby="process-heading"><div className="section-wrap">
+        <div className="section-heading"><div><span className="eyebrow">THE WAY WE WORK</span><h2 id="process-heading">A clear path.<br />From idea to out there.</h2></div><p>Close collaboration. Clear milestones.<br />You’re part of the process at every step.</p></div>
+        <div className="process-grid">{[
+          { icon: <Sparkles />, title: 'Get the right brief.', text: 'We ask questions, understand your users, and turn your goals into a focused scope.' },
+          { icon: <Monitor />, title: 'Make it make sense.', text: 'We shape the experience and refine the design together before writing code.' },
+          { icon: <Code2 />, title: 'Build with care.', text: 'Regular reviews, thoughtful engineering, and testing on the screens that matter.' },
+          { icon: <BarChart3 />, title: 'Launch. Then learn.', text: 'We help you go live, hand things over, and plan what comes next.' },
+        ].map(step => <article className="process-step" key={step.title}><span className="process-icon">{step.icon}</span><h3>{step.title}</h3><p>{step.text}</p></article>)}</div>
+      </div></section>
 
       <section id="studio" className="studio-section section-wrap section-space" aria-labelledby="studio-heading">
-        <div className="studio-art product-studio-art" data-reveal><div className="studio-art-note"><span className="eyebrow">GOOD SOFTWARE STARTS WITH</span><strong>A question<br /><i>worth solving.</i></strong><div className="studio-art-steps"><span>Listen</span><span>Design</span><span>Build</span></div></div><div className="studio-mini-window"><div className="studio-mini-bar"><span /><span /><span /><small>PROJECT WORKSPACE</small></div><div className="studio-mini-content"><span className="studio-mini-icon"><Code2 /></span><strong>Made for the work<br />that matters.</strong><p>Clear goals. Thoughtful details.<br />Software that works for you.</p><span className="studio-mini-status"><span /> DESIGNED WITH INTENTION</span></div></div><div className="studio-art-label"><BrandMark /><span>THOUGHTFUL BY DESIGN.<br />BUILT FOR REAL WORK.</span></div></div>
-        <div className="studio-copy" data-reveal><span className="eyebrow">A GLOBAL DIGITAL PARTNER</span><h2 id="studio-heading">Small by choice.<br /><i>Built for range.</i></h2><p>We help startups and growing businesses worldwide turn ideas into usable digital products across web, mobile, SaaS, and social channels.</p><p>Strategy, design, development, and growth stay in one close collaboration—with clear updates, scheduled calls, and milestones aligned to your time zone.</p><div className="studio-principles"><div><span>Direct collaboration</span><p>A close partnership with the people doing the work.</p></div><div><span>Global delivery</span><p>Clear communication and overlap for international teams.</p></div></div><div className="studio-signoff"><span className="signature">One team. Every screen.</span><BrandMark /></div></div>
+        <div className="studio-heading"><span className="eyebrow">MEET THE STUDIO</span><h2 id="studio-heading">Small team.<br />Shared ambition.</h2><span className="studio-signature">Design minds. Developer hands.</span></div>
+        <div className="studio-copy"><p className="studio-lead">Your project deserves people who care about it as much as you do.</p><p>We’re an independent studio based in India, bringing design and development together for startups and growing businesses worldwide. You work directly with the people shaping your product, from the first sketch to launch day.</p><div className="studio-principles"><div><Check size={18} /><span><strong>Direct by design</strong><small>A close working relationship, with fewer handoffs.</small></span></div><div><Globe2 size={18} /><span><strong>Built to work remotely</strong><small>Clear updates and calls planned around your time zone.</small></span></div></div><button className="text-link" onClick={() => startProject()}>Let’s get to know each other</button></div>
       </section>
 
-      <section id="process" className="process-section section-space" aria-labelledby="process-heading"><div className="section-wrap"><div className="section-heading" data-reveal><div><span className="eyebrow">FROM “WHAT IF” TO OUT IN THE WORLD</span><h2 id="process-heading">A clear process.<br /><i>Room for possibility.</i></h2></div><p>You bring the ambition. We bring the care, clarity, and craft to make it happen.</p></div><div className="process-grid" data-reveal>{[
-        { icon: <Sparkles />, title: 'Find the opportunity.', label: 'DISCOVER & DEFINE', text: 'We understand your audience, goals, channels, and operational needs before choosing the right product scope.' },
-        { icon: <Monitor />, title: 'Shape the experience.', label: 'DESIGN & REFINE', text: 'We map the journey and turn it into a clear interface—ready to test across web and mobile screens.' },
-        { icon: <Code2 />, title: 'Make it real.', label: 'BUILD & PERFECT', text: 'We develop the product, integrations, and launch-ready flows with close reviews at every milestone.' },
-        { icon: <BarChart3 />, title: 'Grow with purpose.', label: 'LAUNCH & OPTIMIZE', text: 'We help launch your digital presence, then improve campaigns, content, and product flows with real feedback.' },
-      ].map((step, index) => <div className="process-step" key={step.title}><span className="process-number">{String(index + 1).padStart(2, '0')}</span><span className="process-icon">{step.icon}</span><span className="eyebrow">{step.label}</span><h3>{step.title}</h3><p>{step.text}</p></div>)}</div></div></section>
+      <section id="faq" className="faq-section section-space" aria-labelledby="faq-heading"><div className="section-wrap faq-layout"><div className="faq-intro"><span className="eyebrow">A FEW THINGS TO KNOW</span><h2 id="faq-heading">Good questions.<br />Straight answers.</h2><p>Have a different question?</p><button className="text-link" onClick={() => startProject()}>Ask us directly</button></div><div className="faq-list">{faqs.map((faq, index) => <div key={faq.question} className={`faq-item ${faqOpen === index ? 'open' : ''}`}><h3><button aria-expanded={faqOpen === index} aria-controls={`faq-answer-${index}`} onClick={() => setFaqOpen(faqOpen === index ? null : index)}>{faq.question}<Plus size={20} /></button></h3><div id={`faq-answer-${index}`} className="faq-answer" hidden={faqOpen !== index}><p>{faq.answer}</p></div></div>)}</div></div></section>
 
-      <section id="faq" className="faq-section section-wrap section-space" aria-labelledby="faq-heading"><div className="faq-intro" data-reveal><span className="eyebrow">A LITTLE CLARITY</span><h2 id="faq-heading">Good questions.<br /><i>Honest answers.</i></h2><p>Something else on your mind?</p><button className="text-link" onClick={() => startProject()}>We’d love to hear it</button></div><div className="faq-list" data-reveal>{faqs.map((faq, index) => <div key={faq.question} className={`faq-item ${faqOpen === index ? 'open' : ''}`}><h3><button aria-expanded={faqOpen === index} aria-controls={`faq-answer-${index}`} onClick={() => setFaqOpen(faqOpen === index ? null : index)}>{faq.question}<Plus size={20} /></button></h3><div id={`faq-answer-${index}`} className="faq-answer" hidden={faqOpen !== index}><p>{faq.answer}</p></div></div>)}</div></section>
+      <section id="contact" className="contact-section" aria-labelledby="contact-heading"><div className="section-wrap contact-inner"><div><span className="eyebrow">THE NEXT GOOD THING STARTS HERE</span><h2 id="contact-heading">What’s next?</h2><p>A better website. A new product.<br />An idea worth exploring together.</p></div><div className="contact-actions"><button className="button button-cream" onClick={() => startProject()}>Start a conversation</button><a href={`mailto:${studio.email}`} className="contact-email">{studio.email}</a></div></div></section>
 
-      <section id="contact" className="contact-section" aria-labelledby="contact-heading"><div className="contact-orbit orbit-one" /><div className="contact-orbit orbit-two" /><div className="section-wrap contact-inner" data-reveal><BrandMark className="contact-mark" /><span className="eyebrow">YOUR NEXT CHAPTER STARTS HERE</span><h2 id="contact-heading">Got a big idea?<br /><i>Let’s make it real.</i></h2><p>Tell us what’s slowing you down or what you wish your software could do.<br className="hidden sm:block" /> We’ll help you figure out a thoughtful next step.</p><button className="button button-cream" onClick={() => startProject()}>Start a conversation <Sparkles size={17} /></button><a href={`mailto:${studio.email}`} className="contact-email">{studio.email}</a></div></section>
     </main>}
 
-    <footer className="site-footer section-wrap"><div className="footer-top"><BrandIdentity /><p>Digital product & growth studio.<br />Web, mobile, SaaS, and social.</p><div><a href="#work">Our work</a><a href="#expertise">Services</a><button onClick={() => startProject()}>Start a project</button></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {studio.name}. Made with intention.</span><span className="footer-location"><Globe2 size={14} /> Based in India · Working worldwide</span><button onClick={() => setModal({ type: 'privacy' })}>Privacy</button><a href="#">Back to top <ChevronDown size={14} className="rotate-180" /></a></div></footer>
+    <footer className="site-footer section-wrap"><div className="footer-top"><div><BrandIdentity /><p>Thoughtful digital experiences.<br />Built around your business.</p></div><div className="footer-links"><a href="#work">Our work</a><a href="#expertise">Services</a><a href="#studio">About us</a><button onClick={() => startProject()}>Get in touch</button></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {studio.name}</span><span className="footer-location"><Globe2 size={15} /> Based in India. Working worldwide.</span><div><button onClick={() => setModal({ type: 'privacy' })}>Privacy</button><a href="#">Back to top</a></div></div></footer>
 
     {modal?.type === 'inquiry' && <Modal key="inquiry" labelId="inquiry-title" onClose={() => setModal(null)}><InquiryForm initialService={modal.service} /></Modal>}
-    {modal?.type === 'project' && <Modal key={modal.project.id} labelId="project-dialog-title" onClose={() => setModal(null)} wide><div className="project-dialog"><span className="eyebrow">{modal.project.type}</span><h2 id="project-dialog-title">{modal.project.name}</h2><p className="project-dialog-subtitle">{modal.project.subtitle}</p><ProjectVisual project={modal.project} />{modal.project.id === 'viharsync' && <div className="project-detail-gallery"><div className="project-detail-heading"><span className="eyebrow">PRODUCT SURFACE GALLERY</span><span>Web · Admin · Mobile</span></div><div className="project-detail-grid">{workSurfaces.map(surface => <figure key={surface.title} className={surface.label.includes('MOBILE') ? 'detail-mobile' : 'detail-wide'}><img src={surface.image} alt={`${surface.title} in ViharSync`} loading="lazy" /><figcaption><span>{surface.label}</span><strong>{surface.title}</strong></figcaption></figure>)}</div></div>}<div className="project-dialog-body"><div><h3>A closer look.</h3><p>{modal.project.description}</p><ul>{modal.project.details.map(detail => <li key={detail}>{detail}</li>)}</ul></div><aside><span className="eyebrow">THE FOCUS</span>{modal.project.tags.map(tag => <span key={tag} className="project-tag">{tag}</span>)}</aside></div><p className="project-disclosure">{modal.project.note}</p><button className="button button-dark" onClick={() => startProject(modal.project.category === 'SaaS platforms' ? 'Custom SaaS' : modal.project.category === 'Mobile apps' ? 'iOS & Android app' : 'Web & social growth')}>Have something in mind?</button>{modal.project.liveUrl && <a className="text-link ml-5" href={modal.project.liveUrl} target="_blank" rel="noreferrer">Visit live project</a>}</div></Modal>}
+    {modal?.type === 'project' && <Modal key={modal.project.id} labelId="project-dialog-title" onClose={() => setModal(null)} wide><div className="project-dialog"><span className="eyebrow">{modal.project.type}</span><h2 id="project-dialog-title">{modal.project.name}</h2><p className="project-dialog-subtitle">{modal.project.subtitle}</p><ProjectGallery project={modal.project} /><div className="project-dialog-body"><div><h3>About the project</h3><p>{modal.project.description}</p><ul>{modal.project.details.map(detail => <li key={detail}>{detail}</li>)}</ul></div><aside><span className="eyebrow">PROJECT FOCUS</span>{modal.project.tags.map(tag => <span key={tag} className="project-tag">{tag}</span>)}</aside></div><p className="project-disclosure">{modal.project.note}</p><div className="project-dialog-actions"><button className="button button-dark" onClick={() => startProject(modal.project.category === 'SaaS platforms' ? 'Custom SaaS' : modal.project.category === 'Mobile apps' ? 'iOS & Android app' : 'Web & social growth')}>Discuss a similar project</button>{modal.project.liveUrl && <a className="button button-outline" href={modal.project.liveUrl} target="_blank" rel="noreferrer">Visit live website</a>}</div></div></Modal>}
     {modal?.type === 'privacy' && <Modal key="privacy" labelId="privacy-title" onClose={() => setModal(null)}><span className="eyebrow">YOUR INFORMATION</span><h2 id="privacy-title">A little privacy.</h2><div className="privacy-content"><p>This website does not use analytics, advertising trackers, or cookies. Fonts and images are served with the site.</p><h3>Project inquiries</h3><p>The project form creates an email draft in your browser. Your entries stay in memory until you close or reload the page; this site does not save them to a server. A brief is only sent when you send it through your own email application.</p><h3>When you email us</h3><p>Your email provider and our email provider handle delivery. We use the information you choose to send to discuss your inquiry and any work you ask us to undertake.</p><h3>Questions or deletion requests</h3><p>Contact <a href={`mailto:${studio.email}`}>{studio.email}</a> about information you’ve sent to us. Hosting providers may process ordinary access logs needed to serve this website.</p></div></Modal>}
   </>
 }

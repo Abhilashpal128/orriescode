@@ -1,6 +1,8 @@
 # Orris & Code
 
-An independent digital product and growth studio showcase for SaaS platforms, iOS and Android apps, websites, and social media management, built with React, TypeScript, Vite, and Tailwind CSS. The visual direction pairs readable DM Sans with Instrument Serif accents, a soft sage-and-stone palette, and clear, US-client-friendly messaging.
+An independent digital product and growth studio portfolio, built with React, TypeScript, Vite, and Tailwind CSS. The interface uses DM Sans throughout, a white and navy palette, and cobalt-blue highlights. Shared containers, consistent section spacing, and responsive grids keep content aligned.
+
+The homepage is divided into an introduction, selected work, services, process, studio, FAQ, and contact. Services appear in a static grid and link to their own detail views.
 
 ## Run locally
 
@@ -19,17 +21,17 @@ npm run preview     # Preview the production build
 npm run test:e2e    # Desktop/mobile interaction and automated accessibility checks
 ```
 
-Browser checks use an installed Google Chrome through Playwright. Install Chrome if it is not already available. Tests cover project filtering, dialogs and focus return, keyboard service tabs, form validation, email draft content, downloadable briefs, FAQ, mobile navigation, responsive overflow, and automated WCAG A/AA checks. Automated checks are not a complete accessibility audit.
+Browser checks use an installed Google Chrome through Playwright. Tests cover project filtering, screen galleries, dialogs and focus return, service navigation, form validation, email draft content, downloadable briefs, FAQ, mobile navigation, responsive overflow, and automated WCAG A/AA checks. Automated checks are not a complete accessibility audit.
 
 ## Change the brand, email, or projects
 
 **`src/content.ts`** is the main content file:
 
 - `studio.name`: your final studio name; the header/footer wordmark and email greeting update automatically.
-- `studio.logo`: a path to your logo in `public`, for example `/images/brand-logo.svg`. Leave empty to use the temporary geometric mark.
+- `studio.logo`: a path to a custom logo in `public`. Leave empty to use the blue looped symbol with code brackets through `src/components/BrandMark.tsx`.
 - `studio.email`: currently `abhilashpal128@gmail.com`.
 - `projects`: portfolio entries, descriptions, labels, and links.
-- `services` and `faqs`: service and FAQ copy.
+- `faqs`: FAQ copy. The displayed service offerings are defined in `src/App.tsx`.
 
 Update the title, description, and social metadata in `index.html`, and replace `public/favicon.svg` when final branding arrives. The current **Orris & Code** name is provisional. Web research does not establish trademark or domain availability; similar Orris studio names exist, so this should not be treated as a cleared business name.
 
@@ -41,6 +43,7 @@ To add a project, place an image in `public/images` and add a record to `project
   name: 'Your project',
   subtitle: 'A concise description of the work.',
   category: 'SaaS platforms', // or 'Mobile apps' or 'Web & growth'
+  platforms: ['website'], // Add 'app' only for projects that include an app.
   type: 'Client project',
   description: 'What you built and why.',
   details: ['Verified project detail.', 'Another verified detail.'],
@@ -48,6 +51,7 @@ To add a project, place an image in `public/images` and add a record to `project
   className: 'custom',
   previewImage: '/images/your-project.webp',
   previewAlt: 'Describe the actual project screenshot.',
+  galleryImages: [{ title: 'Homepage', image: '/images/your-project.webp' }],
   note: 'Any relevant project context or image disclosure.',
   liveUrl: 'https://your-real-project-url.com', // Optional; omit until live.
 }
@@ -55,11 +59,11 @@ To add a project, place an image in `public/images` and add a record to `project
 
 The gallery count and filters update automatically. Projects open in accessible dialogs. Live-project links appear only when a URL is supplied. A project without an image receives a branded cover with its title.
 
-## ViharSync and concept work
+## Featured projects
 
-ViharSync is the founder-built **society-management SaaS** product. No client communities currently use it. Its interface is explicitly labeled as a concept with sample data, not a production screenshot or evidence of live features or outcomes.
+**ViharSync** is the founder-built society-management product. The portfolio displays the supplied web, admin, and resident app screenshots. Its dialog includes separate web/admin and mobile galleries, with manual screen controls. No external client usage or paid-case-study results are claimed.
 
-There are no client case studies yet. ViharSync is the founder-built product concept, while Orbit Mobile and Pulse Studio are independent design concepts. None are represented as commissioned engagements, shipped client projects, or evidence of client results.
+**Mumbai Man Packers & Movers** is a website project. It appears under All projects and Website projects, never App projects. Its dialog includes homepage and services previews captured from https://mumbaimanpackers.com/ and a link to the live website. No app, backend, or performance results are attributed to this project.
 
 ## Inquiry behavior
 
@@ -69,16 +73,19 @@ This is a frontend project, with no email-sending backend. The site never claims
 
 ## Assets and design
 
-- `public/images/jewelry-hero.webp`: original AI-generated gold-ring still life used in the independent jewelry concept.
-- `public/images/jewelry-editorial.webp`: original AI-generated editorial jewelry portrait used in the independent jewelry concept.
-- `design/image-prompts.json`: exact prompts and generation mode (built-in image generation).
+- `public/images/viharsync/`: supplied product screenshots for the hero, project card, and screen gallery.
+- `public/images/mumbai-man/`: optimized WebP homepage and services captures from the live project website.
+- Existing jewelry images and `design/image-prompts.json` are retained from earlier work and are not displayed in the portfolio.
 - `scripts/prepare-assets.mjs`: optional Sharp conversion script for optimizing new source images into WebP.
-- `src/index.css`: visual system, responsive composition, product dashboard, and reduced-motion behavior.
+- `src/index.css`: shared visual system, responsive layouts, dialogs, and reduced-motion behavior.
 - `src/components/BrandIdentity.tsx`: configurable brand wordmark and logo.
+- `public/images/brand/orris-code-mark.svg`: flat vector adaptation of the supplied looped logo, with blue loops and navy code brackets. A transparent 512px PNG is available alongside it. The lowercase wordmark uses navy lettering with a blue ampersand and period.
+- `public/favicon.svg`: a simplified loop-only mark for browser tabs, with a lighter blue for dark browser themes. The touch icon also omits the small code brackets.
+- `scripts/prepare-brand.mjs`: the shared vector geometry and asset exporter. Run `node scripts/prepare-brand.mjs` to regenerate the SVG, transparent PNG, favicon, and touch icon together.
 
-Both images total approximately 304 KB. Fonts are bundled locally through Fontsource, with no runtime Google Fonts requests. Tailwind v4 is integrated through `@tailwindcss/vite`; utility classes and custom CSS share the theme defined in `src/index.css`.
+The Mumbai Man previews total approximately 224 KB. Fonts are bundled locally through Fontsource, with no runtime Google Fonts requests. Tailwind v4 is integrated through `@tailwindcss/vite`; utility classes and custom CSS share the theme defined in `src/index.css`.
 
-The ViharSync dashboard in the hero and portfolio is an illustrative product concept with sample data, not a live-product screenshot or customer case study. The site does not claim client results, testimonials, or a booking/calendar integration. Its layout, copy, visual identity, and generated images are original to this build.
+The portfolio uses local screenshots rather than embedded external sites. Project galleries do not advance automatically, and controls remain usable with a keyboard. The site does not claim client results, testimonials, or a booking/calendar integration.
 
 ## Deploy to Vercel
 
@@ -91,6 +98,6 @@ The project is configured as a static Vite deployment. From the project root (th
 
 For the CLI, run `npx vercel` for a preview deployment and `npx vercel --prod` when you are ready to publish. The CLI will ask you to sign in and link the local folder to a Vercel project. If deploying through Git, push the project to a Git provider first and import that repository into Vercel.
 
-No environment variables or serverless functions are required. The site currently uses one page with in-page anchors, so it does not need SPA rewrite rules. Add a rewrite if client-side routes are introduced later. Set the final domain and a production social-sharing image before sharing publicly; the current site has not been deployed.
+No environment variables or serverless functions are required. The site uses in-page anchors and hash routes for service detail views, so it does not need SPA rewrite rules. Set the final domain and a production social-sharing image before sharing publicly.
 
 Local verification artifacts are ignored by Git in `.preview/` and `test-results/`. `scripts/inspect-preview.mjs` produces local screenshots and a compact accessibility report while Vite is running.

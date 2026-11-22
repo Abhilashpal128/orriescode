@@ -19,12 +19,15 @@ export type Project = {
   previewImage?: string
   previewAlt?: string
   liveUrl?: string
+  platforms: ('app' | 'website')[]
+  galleryImages?: { title: string; image: string }[]
 }
 
 // Add verified projects here. Concept work is explicitly identified in the UI.
 export const projects: Project[] = [
   {
     id: 'viharsync',
+    platforms: ['app', 'website'],
     name: 'ViharSync',
     subtitle: 'Society operations, residents, finance, and access.',
     category: 'SaaS platforms',
@@ -34,6 +37,26 @@ export const projects: Project[] = [
     tags: ['React / Next.js', 'Mobile app', 'Admin platform', 'SaaS'],
     className: 'vihar',
     note: 'Founder-built product showcase. ViharSync is shown as our own product. No external client usage or paid-case-study results are claimed.',
+  },
+  {
+    id: 'mumbai-man',
+    platforms: ['website'],
+    name: 'Mumbai Man Packers & Movers',
+    subtitle: 'A clear online home for a business that helps people move.',
+    category: 'Web & growth',
+    type: 'Business website',
+    description: 'A service-focused website for Mumbai Man Packers & Movers. The experience brings moving services, business information, and contact options together in a clear, approachable layout.',
+    details: ['Dedicated sections for home shifting, office relocation, and vehicle transport.', 'A consistent visual style with service imagery and clearly organized information.', 'Prominent quote, phone, and WhatsApp contact options.', 'A website project for a Mumbai-based moving business.'],
+    tags: ['Website design', 'Web development', 'Service pages'],
+    className: 'mumbai',
+    previewImage: '/images/mumbai-man/website.webp',
+    previewAlt: 'Mumbai Man Packers & Movers website with a purple headline and a team loading a moving truck.',
+    liveUrl: 'https://mumbaimanpackers.com/',
+    galleryImages: [
+      { title: 'Website homepage', image: '/images/mumbai-man/website.webp' },
+      { title: 'Moving services', image: '/images/mumbai-man/services.webp' },
+    ],
+    note: 'Website project. Previews show the live Mumbai Man Packers & Movers website.',
   },
 ]
 

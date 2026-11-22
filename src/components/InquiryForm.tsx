@@ -35,7 +35,7 @@ export default function InquiryForm({ initialService }: { initialService?: strin
 
   return <>
     <span className="eyebrow">A GOOD THING STARTS WITH A CONVERSATION</span>
-    <h2 id="inquiry-title">Let’s make<br /><i>something matter.</i></h2>
+    <h2 id="inquiry-title">Let’s make<br /><span className="heading-accent">something matter.</span></h2>
     {!brief ? <>
       <p className="dialog-intro">A little about you. A little about your idea. We’ll take it from there.</p>
       <form onSubmit={prepare} className="inquiry-form">

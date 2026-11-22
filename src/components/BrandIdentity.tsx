@@ -4,6 +4,6 @@ import { studio } from '../content'
 export default function BrandIdentity() {
   return <a href="#" className="brand" aria-label={`${studio.name} home`}>
     {studio.logo ? <img className="brand-logo" src={studio.logo} alt="" /> : <BrandMark />}
-    <span>{studio.name.toLowerCase().split(/(&)/).map((part, index) => part === '&' ? <i key={index}>&</i> : part)}<span className="brand-period">.</span></span>
+    <span className="brand-wordmark">{studio.name.toLowerCase().split(/(&)/).map((part, index) => part === '&' ? <span className="brand-accent" key={index}>&amp;</span> : part)}<span className="brand-accent">.</span></span>
   </a>
 }
