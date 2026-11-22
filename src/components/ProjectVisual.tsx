@@ -2,8 +2,8 @@
 import BrandMark from './BrandMark'
 
 export default function ProjectVisual({ project }: { project: Project }) {
-  if (project.previewImage) return <div className="project-visual mumbai-visual">
-    <span className="project-cover-label" aria-hidden="true">{project.id === 'mumbai-man' ? 'Mumbai Man' : project.name}<small>A BUSINESS, WELL PRESENTED.</small></span>
+  if (project.previewImage) return <div className={`project-visual ${project.id === 'mumbai-man' ? 'mumbai-visual' : project.id === 'sd-build-solutions' ? 'sd-visual' : 'mumbai-visual'}`}>
+    <span className="project-cover-label" aria-hidden="true">{project.id === 'mumbai-man' ? 'Mumbai Man' : project.id === 'sd-build-solutions' ? 'S&D Build Solutions' : project.name}<small>{project.id === 'sd-build-solutions' ? 'QUALITY. CRAFT. TRUST.' : 'A BUSINESS, WELL PRESENTED.'}</small></span>
     <div className="preview-browser"><div className="browser-chrome" aria-hidden="true"><span /><span /><span /><small>{project.liveUrl ? new URL(project.liveUrl).hostname : project.name}</small></div><img src={project.previewImage} alt={project.previewAlt || `${project.name} website`} loading="lazy" width="1440" height="900" /></div>
   </div>
 

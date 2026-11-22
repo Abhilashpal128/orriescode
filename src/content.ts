@@ -26,6 +26,27 @@ export type Project = {
 // Add verified projects here. Concept work is explicitly identified in the UI.
 export const projects: Project[] = [
   {
+    id: 'sd-build-solutions',
+    platforms: ['website'],
+    name: 'S&D Build Solutions',
+    subtitle: 'Construction, renovation, and interior work for considered homes.',
+    category: 'Web & growth',
+    type: 'Client website',
+    description: 'A refined client website for S&D Build Solutions, bringing construction, renovation, interior work, furniture, carpentry, glazing, aluminium, glass, uPVC, plumbing, electrical, and finishing services into one clear experience.',
+    details: ['A strong, image-led homepage for construction and interior projects.', 'Clear company introduction with a warm, personal tone for Shailesh and Dinesh.', 'A project collection presenting interior work, furniture and carpentry, work in progress, and glazing.', 'An organized services section covering civil work, home renovation, interior work, and furniture and carpentry.'],
+    tags: ['Website design', 'Responsive development', 'Service showcase'],
+    className: 'sd',
+    previewImage: '/images/sd-build-solutions/homepage.png',
+    previewAlt: 'S&D Build Solutions homepage with a refined interior and the headline “A softer palette. A warmer welcome.”',
+    galleryImages: [
+      { title: 'Homepage and featured project', image: '/images/sd-build-solutions/homepage.png' },
+      { title: 'About S&D Build Solutions', image: '/images/sd-build-solutions/about.png' },
+      { title: 'The project collection', image: '/images/sd-build-solutions/work.png' },
+      { title: 'Construction and interior services', image: '/images/sd-build-solutions/services.png' },
+    ],
+    note: 'Client website project. Previews are based on the supplied project screens.',
+  },
+  {
     id: 'viharsync',
     platforms: ['app', 'website'],
     name: 'ViharSync',
