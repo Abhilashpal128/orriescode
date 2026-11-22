@@ -1,7 +1,7 @@
 export const studio = {
   name: 'Orris & Code',
-  logo: '', // Add a local path, for example '/images/your-logo.svg'.
-  email: 'abhilashpal128@gmail.com',
+  logo: '/images/brand/orris-and-code-logo.png',
+  email: 'info.orrisandcode@gmail.com',
   tagline: 'Independent product studio.',
 }
 

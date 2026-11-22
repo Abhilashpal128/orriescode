@@ -115,7 +115,7 @@ test('inquiries validate fields, create a real email draft, and download the bri
   await page.getByRole('button', { name: 'Prepare my inquiry' }).click()
   await expect(page.getByText('Your next chapter is ready.')).toBeVisible()
   const href = await page.getByRole('link', { name: 'Open email draft' }).getAttribute('href')
-  expect(href).toContain('mailto:abhilashpal128@gmail.com?')
+  expect(href).toContain('mailto:info.orrisandcode@gmail.com?')
   const query = new URLSearchParams(href!.split('?')[1])
   expect(query.get('body')).toContain('Taylor Digital')
   expect(query.get('body')).toContain('$5,000–$10,000')
